@@ -61,6 +61,8 @@ Our team explored various ways to run Kubernetes locally, each with its own adva
 1. **Docker Desktop with Kubernetes**: Most of our team opted for this method, enabling the Kubernetes feature in Docker Desktop. This approach doesn't require a VM, resulting in less overhead and a smoother experience for many developers.
 2. **Minikube**: A couple of team members chose Minikube, finding it relatively easy to set up. Minikube creates a VM to run a single-node Kubernetes cluster, which also works well with kubectl (the Kubernetes command-line tool).
 
+To enable Kubernetes in Docker Desktop, just go to settings and enable Kubernetes in the Kubernetes tab, you will have to restart Docker Desktop after that.
+
 When you did this make sure to have kubectl installed and configured.
 For the Mac users that is as easy as:
 
@@ -69,7 +71,20 @@ brew install kubectl
 ```
 
 As you see in the readme, after building the application with gradle, we start with creating the first pod.
-You can do so by running:
+You can do so by first searching for `{buildversion}` and change it into a version that you like.
+Be sure to keep it in sync with the docker setting in the `build.gradle.kts` file.
+
+```kotlin
+ktor {
+    docker {
+        localImageName.set("my-app")
+        imageTag.set("1.0.0")
+    }
+}
+
+```
+
+When you did that, validate your docker image is build by running `docker images | grep my-app` and you should see the image you just build.
 
 ```shell
 kubectl apply -f blue-deployment.yaml,service-node-port-blue.yaml
